@@ -2,6 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg-base: #0d0f14;
+  --bg-sidebar: #0a0c10;
+  --bg-panel: #13161e;
+  --bg-chat: #0f1117;
+  --bg-hover: rgba(255, 255, 255, 0.05);
+  --bg-input: rgba(255, 255, 255, 0.04);
+  --bg-bubble: #1c2030;
+
+  --accent-neon: #22d67a;
+  --accent-neon-dim: rgba(34, 214, 122, 0.1);
+  --accent-violet: #8b5cf6;
+  --accent-violet-dim: rgba(139, 92, 246, 0.12);
+
+  --text-primary: #e8eaf2;
+  --text-muted: #5a6070;
+
+  --border-subtle: rgba(255, 255, 255, 0.06);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: "Golos Text", sans-serif;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
