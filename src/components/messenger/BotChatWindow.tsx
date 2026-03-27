@@ -235,9 +235,9 @@ export default function BotChatWindow({ coins, stars, onEarnCoins, onBuyStars }:
         return (
           <div className="bc-widget">
             {[
-              { coins: 100, stars: 1 },
-              { coins: 450, stars: 5 },
-              { coins: 800, stars: 10 },
+              { coins: 1000, stars: 1 },
+              { coins: 4500, stars: 5 },
+              { coins: 8000, stars: 10 },
             ].map((r) => (
               <div key={r.stars} className="bc-exchange-row">
                 <span className="bc-ex-label">🪙 {r.coins} → ⭐ {r.stars}</span>

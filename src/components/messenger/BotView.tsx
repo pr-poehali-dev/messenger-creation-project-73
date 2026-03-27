@@ -268,9 +268,9 @@ export default function BotView({ coins, onEarnCoins }: Props) {
           </div>
           <div className="exchange-rates">
             {[
-              { coins: 100, stars: 1 },
-              { coins: 450, stars: 5 },
-              { coins: 800, stars: 10 },
+              { coins: 1000, stars: 1 },
+              { coins: 4500, stars: 5 },
+              { coins: 8000, stars: 10 },
             ].map((r) => (
               <div key={r.stars} className="exchange-row">
                 <span className="ex-coins">🪙 {r.coins}</span>

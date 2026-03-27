@@ -11,10 +11,10 @@ type Props = {
 };
 
 const STAR_PACKS = [
-  { id: 1, stars: 1, coins: 100, label: "Стартовый" },
-  { id: 2, stars: 5, coins: 450, label: "Популярный", badge: "🔥" },
-  { id: 3, stars: 10, coins: 800, label: "Выгодный", badge: "💎" },
-  { id: 4, stars: 25, coins: 1800, label: "Максимум", badge: "👑" },
+  { id: 1, stars: 1, coins: 1000, label: "Стартовый" },
+  { id: 2, stars: 5, coins: 4500, label: "Популярный", badge: "🔥" },
+  { id: 3, stars: 10, coins: 8000, label: "Выгодный", badge: "💎" },
+  { id: 4, stars: 25, coins: 18000, label: "Максимум", badge: "👑" },
 ];
 
 const GIFTS = [
