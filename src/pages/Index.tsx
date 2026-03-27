@@ -2,6 +2,7 @@ import { useState } from "react";
 import Sidebar from "@/components/messenger/Sidebar";
 import ChatList from "@/components/messenger/ChatList";
 import ChatWindow from "@/components/messenger/ChatWindow";
+import BotChatWindow from "@/components/messenger/BotChatWindow";
 import ContactsView from "@/components/messenger/ContactsView";
 import ProfileView from "@/components/messenger/ProfileView";
 import SettingsView from "@/components/messenger/SettingsView";
@@ -30,10 +31,24 @@ export type Chat = {
   status: "online" | "offline" | "away" | "busy";
   isGroup?: boolean;
   isEncrypted?: boolean;
+  isBot?: boolean;
   messages: Message[];
 };
 
-const CHATS: Chat[] = [
+const BOT_CHAT: Chat = {
+  id: 0,
+  name: "МонетаБот",
+  avatar: "🤖",
+  lastMessage: "Тапай монету и зарабатывай! 🪙",
+  time: "сейчас",
+  unread: 1,
+  online: true,
+  status: "online",
+  isBot: true,
+  messages: [],
+};
+
+const CHATS: Chat[] = [BOT_CHAT,
   {
     id: 1,
     name: "Алина Смирнова",
@@ -121,7 +136,7 @@ const CHATS: Chat[] = [
 
 export default function Index() {
   const [activeTab, setActiveTab] = useState<TabType>("chats");
-  const [activeChat, setActiveChat] = useState<Chat | null>(CHATS[0]);
+  const [activeChat, setActiveChat] = useState<Chat | null>(CHATS[1]);
   const [chats, setChats] = useState<Chat[]>(CHATS);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -196,7 +211,14 @@ export default function Index() {
               searchQuery={searchQuery}
               onSearch={setSearchQuery}
             />
-            {activeChat ? (
+            {activeChat?.isBot ? (
+              <BotChatWindow
+                coins={coins}
+                stars={stars}
+                onEarnCoins={handleEarnCoins}
+                onBuyStars={handleBuyStars}
+              />
+            ) : activeChat ? (
               <ChatWindow chat={activeChat} onSend={handleSendMessage} />
             ) : (
               <div className="chat-empty">

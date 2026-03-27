@@ -56,22 +56,26 @@ export default function ChatList({ chats, activeChat, onSelectChat, searchQuery,
         {chats.map((chat) => (
           <button
             key={chat.id}
-            className={`chat-item ${activeChat?.id === chat.id ? "active" : ""}`}
+            className={`chat-item ${activeChat?.id === chat.id ? "active" : ""} ${chat.isBot ? "chat-item-bot" : ""}`}
             onClick={() => onSelectChat(chat)}
           >
-            <div className="chat-avatar">
+            <div className={`chat-avatar ${chat.isBot ? "chat-avatar-bot" : ""}`}>
               <span>{chat.avatar}</span>
-              <div
-                className="status-dot"
-                style={{ background: statusColors[chat.status] }}
-                title={statusLabels[chat.status]}
-              />
+              {!chat.isBot && (
+                <div
+                  className="status-dot"
+                  style={{ background: statusColors[chat.status] }}
+                  title={statusLabels[chat.status]}
+                />
+              )}
+              {chat.isBot && <div className="status-dot" style={{ background: "#22d67a" }} />}
             </div>
             <div className="chat-info">
               <div className="chat-name-row">
                 <span className="chat-name">
-                  {chat.isGroup && <Icon name="Users" size={13} className="group-icon" />}
+                  {chat.isGroup && !chat.isBot && <Icon name="Users" size={13} className="group-icon" />}
                   {chat.name}
+                  {chat.isBot && <span className="bot-label">БОТ</span>}
                 </span>
                 <div className="chat-meta-right">
                   {chat.isEncrypted && (
