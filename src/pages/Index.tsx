@@ -6,8 +6,10 @@ import ContactsView from "@/components/messenger/ContactsView";
 import ProfileView from "@/components/messenger/ProfileView";
 import SettingsView from "@/components/messenger/SettingsView";
 import NotificationsView from "@/components/messenger/NotificationsView";
+import BotView from "@/components/messenger/BotView";
+import StoreView from "@/components/messenger/StoreView";
 
-export type TabType = "chats" | "contacts" | "profile" | "settings" | "notifications";
+export type TabType = "chats" | "contacts" | "profile" | "settings" | "notifications" | "bot" | "store";
 
 export type Message = {
   id: number;
@@ -123,6 +125,11 @@ export default function Index() {
   const [chats, setChats] = useState<Chat[]>(CHATS);
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Economy state
+  const [coins, setCoins] = useState(120);
+  const [stars, setStars] = useState(2);
+  const [isPremium, setIsPremium] = useState(false);
+
   const handleSendMessage = (text: string) => {
     if (!activeChat || !text.trim()) return;
     const newMsg: Message = {
@@ -141,13 +148,44 @@ export default function Index() {
     setActiveChat({ ...activeChat, messages: [...activeChat.messages, newMsg], lastMessage: text });
   };
 
+  const handleEarnCoins = (amount: number) => {
+    setCoins((prev) => Math.max(0, prev + amount));
+  };
+
+  const handleBuyStars = (starsCount: number, coinsPrice: number): boolean => {
+    if (coins < coinsPrice) return false;
+    setCoins((prev) => prev - coinsPrice);
+    setStars((prev) => prev + starsCount);
+    return true;
+  };
+
+  const handleBuyPremium = (): boolean => {
+    if (isPremium || stars < 30) return false;
+    setStars((prev) => prev - 30);
+    setIsPremium(true);
+    return true;
+  };
+
+  const handleBuyGift = (_gift: string, starsPrice: number): boolean => {
+    if (stars < starsPrice) return false;
+    setStars((prev) => prev - starsPrice);
+    return true;
+  };
+
   const filteredChats = chats.filter((c) =>
     c.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <div className="messenger-app">
-      <Sidebar activeTab={activeTab} onTabChange={setActiveTab} chats={chats} />
+      <Sidebar
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        chats={chats}
+        coins={coins}
+        stars={stars}
+        isPremium={isPremium}
+      />
       <div className="messenger-main">
         {activeTab === "chats" && (
           <>
@@ -169,9 +207,24 @@ export default function Index() {
           </>
         )}
         {activeTab === "contacts" && <ContactsView />}
-        {activeTab === "profile" && <ProfileView />}
+        {activeTab === "profile" && (
+          <ProfileView coins={coins} stars={stars} isPremium={isPremium} />
+        )}
         {activeTab === "settings" && <SettingsView />}
         {activeTab === "notifications" && <NotificationsView />}
+        {activeTab === "bot" && (
+          <BotView coins={coins} onEarnCoins={handleEarnCoins} />
+        )}
+        {activeTab === "store" && (
+          <StoreView
+            coins={coins}
+            stars={stars}
+            isPremium={isPremium}
+            onBuyStars={handleBuyStars}
+            onBuyPremium={handleBuyPremium}
+            onBuyGift={handleBuyGift}
+          />
+        )}
       </div>
     </div>
   );

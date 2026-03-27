@@ -1,7 +1,13 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
-export default function ProfileView() {
+type Props = {
+  coins: number;
+  stars: number;
+  isPremium: boolean;
+};
+
+export default function ProfileView({ coins, stars, isPremium }: Props) {
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState("Иван Петров");
   const [bio, setBio] = useState("Привет, я использую Вспышку!");
@@ -16,22 +22,35 @@ export default function ProfileView() {
 
   const currentStatus = statusOptions.find((s) => s.value === status)!;
 
+  const renderStars = () => {
+    if (stars === 0) return null;
+    return (
+      <div className="profile-stars-row">
+        {[...Array(Math.min(stars, 10))].map((_, i) => (
+          <span key={i} className="profile-star">⭐</span>
+        ))}
+        {stars > 10 && <span className="profile-star-extra">+{stars - 10}</span>}
+      </div>
+    );
+  };
+
   return (
     <div className="panel-view animate-fade-in">
       <div className="panel-view-header">
-        <h2 className="panel-title">Профиль</h2>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <h2 className="panel-title">Профиль</h2>
+          {isPremium && <span className="premium-chip">👑 Premium</span>}
+        </div>
         <button className="icon-btn" onClick={() => setEditing(!editing)}>
           <Icon name={editing ? "Check" : "Pencil"} size={18} />
         </button>
       </div>
 
       <div className="profile-content">
-        <div className="profile-avatar-big">
+        <div className="profile-avatar-big" style={isPremium ? { boxShadow: "0 0 40px rgba(250,204,21,0.35)" } : {}}>
           <span>ИП</span>
-          <div
-            className="profile-status-dot"
-            style={{ background: currentStatus.color }}
-          />
+          <div className="profile-status-dot" style={{ background: currentStatus.color }} />
+          {isPremium && <span className="avatar-premium-big">👑</span>}
         </div>
 
         {editing ? (
@@ -41,9 +60,33 @@ export default function ProfileView() {
             onChange={(e) => setName(e.target.value)}
           />
         ) : (
-          <h3 className="profile-name">{name}</h3>
+          <h3 className="profile-name">
+            {name}
+            {isPremium && <span style={{ marginLeft: 6 }}>✨</span>}
+          </h3>
         )}
         <p className="profile-nick">@ivan_petrov</p>
+
+        {renderStars()}
+
+        <div className="profile-economy-row">
+          <div className="econ-chip coins">
+            <span>🪙</span>
+            <span>{coins.toLocaleString("ru-RU")}</span>
+            <span className="econ-label">монет</span>
+          </div>
+          <div className="econ-chip stars">
+            <span>⭐</span>
+            <span>{stars}</span>
+            <span className="econ-label">звёзд</span>
+          </div>
+          {isPremium && (
+            <div className="econ-chip premium">
+              <span>👑</span>
+              <span>Premium</span>
+            </div>
+          )}
+        </div>
 
         <div className="profile-status-select">
           {statusOptions.map((s) => (
